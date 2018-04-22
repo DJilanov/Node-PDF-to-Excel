@@ -1,0 +1,17 @@
+{
+  "name": "node-pdf-to-excel",
+  "version": "1.0.0",
+  "description": "Node pdf to excel converter",
+  "main": "watcher.js",
+  "repository": "",
+  "author": "Dimitar Jilanov",
+  "scripts": {
+    "start-develop": "node watcher.js C:\training\node-pdf-to-excel\testing"
+  },
+  "dependencies": {
+    "pdf2table": "0.0.2",
+    "watchr": "4.0.1",
+    "xlsx": "^0.12.10"
+  },
+  "devDependencies": {}
+}
