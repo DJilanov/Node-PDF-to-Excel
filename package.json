@@ -9,6 +9,7 @@
     "start-develop": "node watcher.js C:\training\node-pdf-to-excel\testing"
   },
   "dependencies": {
+    "commonpdf": "^0.3.1",
     "pdf2table": "0.0.2",
     "watchr": "4.0.1",
     "xlsx": "^0.12.10"
