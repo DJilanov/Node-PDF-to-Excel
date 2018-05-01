@@ -2,7 +2,7 @@
 const pdf2table = require('pdf2table');
 
 // Import the pdf rotating library
-const rotate = require( 'commonpdf' ).Rotate
+const rotate = require('commonpdf').Rotate
 
 // Import the file system
 const fs = require('fs');
@@ -17,6 +17,7 @@ const excelConverter = require('./excelConverter');
 // Company configs
 const companyConfiguration = require('./companyConfiguration');
 
+// Configuration for saving file
 const saveToExcel = false;
 
 (function() {
@@ -30,11 +31,17 @@ const saveToExcel = false;
                 if (err) {
                     return console.log(err);
                 }
-                const config = companyConfiguration.getCompanyConfiguration(rows);
-                if(saveToExcel) {
-
+                if(rows.length) {
+                    // it is text based pdf
+                    const config = companyConfiguration.getCompanyConfiguration(rows);
+                    if(saveToExcel) {
+    
+                    } else {
+                        writeToTxt(fileName, getInformation(rows, config));
+                    }
                 } else {
-                    writeToTxt(fileName, getInformation(rows, config));
+                    // it is image based pdf
+                    rotatePdfImage(fullPath, 0);
                 }
             });
         });
@@ -59,10 +66,11 @@ const saveToExcel = false;
     }
 
     function rotatePdfImage(pdf, pageNumber) {
-        new Rotate(pdf, pageNumber, {
+        new rotate(pdf, pageNumber, {
             direction:'east'
         }).write().then(outfile => {
             // do something
+            console.log(outfile);
         })
     }
 

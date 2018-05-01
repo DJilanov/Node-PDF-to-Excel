@@ -6,7 +6,9 @@
   "repository": "",
   "author": "Dimitar Jilanov",
   "scripts": {
-    "start-develop": "node watcher.js C:\training\node-pdf-to-excel\testing"
+    "start-develop": "node watcher.js C:/training/node-pdf-to-excel/testing/",
+    "lint": "npm lint .",
+    "validate": "npm ls"
   },
   "dependencies": {
     "commonpdf": "^0.3.1",
