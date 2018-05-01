@@ -7,11 +7,13 @@
   "author": "Dimitar Jilanov",
   "scripts": {
     "start-develop": "node watcher.js C:/training/node-pdf-to-excel/testing/",
+    "start-debug": "node --inspect --debug-brk watcher.js",
     "lint": "npm lint .",
     "validate": "npm ls"
   },
   "dependencies": {
-    "commonpdf": "^0.3.1",
+    "eyes": "^0.1.8",
+    "pdf-extract": "^1.0.11",
     "pdf2table": "0.0.2",
     "watchr": "4.0.1",
     "xlsx": "^0.12.10"

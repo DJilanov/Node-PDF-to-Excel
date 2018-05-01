@@ -4,7 +4,9 @@ const pdfReader = require('./pdfReader');
 
 // Define our watching parameters
 // const path = process.argv[process.argv.length - 1];
-const path = 'C:/training/node-pdf-to-excel/testing/';
+// const path = 'C:/training/node-pdf-to-excel/testing/';
+const path = '/home/osboxes/Public/node-pdf-to-excel/training/';
+
 
 function listener(changeType, fullPath, currentStat, previousStat) {
     let split = fullPath.split('.');

@@ -1,15 +1,16 @@
 // Import the pdf reading library
 const pdf2table = require('pdf2table');
-
-// Import the pdf rotating library
-const rotate = require('commonpdf').Rotate
+const inspect = require('eyes').inspector({maxLength:20000});
+const pdfExtract = require('pdf-extract');
+const pathModule = require('path');
 
 // Import the file system
 const fs = require('fs');
 
 // Define our watching parameters
 // const path = process.argv[process.argv.length - 1];
-const path = 'C:/training/node-pdf-to-excel/testing/';
+// const path = 'C:/training/node-pdf-to-excel/testing/';
+const path = '/home/osboxes/Public/node-pdf-to-excel/training/';
 
 // Excel converter
 const excelConverter = require('./excelConverter');
@@ -22,7 +23,7 @@ const saveToExcel = false;
 
 (function() {
     function parsePdfData(fullPath) {
-        let fileName = fullPath.split('\\')[fullPath.split('\\').length - 1].split('.')[0];
+        let fileName = pathModule.basename(fullPath.split('.')[0]);
         fs.readFile(fullPath, (err, buffer) => {
             if (err) {
                 return console.log(err);
@@ -40,11 +41,31 @@ const saveToExcel = false;
                         writeToTxt(fileName, getInformation(rows, config));
                     }
                 } else {
-                    // it is image based pdf
-                    rotatePdfImage(fullPath, 0);
+                    let processor = pdfExtract(fullPath, {
+                        type: 'ocr',
+                        ocr_flags: [
+                            '-psm 1',       // automatically detect page orientation
+                        ]
+                    }, function(err) {
+                        if (err) {
+                            return callback(err);
+                        }
+                    });
+                    processor.on('complete', function(data) {
+                        inspect(data.text_pages, 'extracted text pages');
+                        callback(null, data.text_pages);
+                    });
+                    processor.on('error', function(err) {
+                        inspect(err, 'error while extracting pages');
+                        return callback(err);
+                    });
                 }
             });
         });
+    }
+
+    function callback(err, data) {
+
     }
 
     function getInformation(rows, config) {
@@ -75,7 +96,9 @@ const saveToExcel = false;
     }
 
     function writeToTxt(fileName, data) {
-        let stream = fs.createWriteStream(path + fileName + '.txt');
+        let stream = fs.createWriteStream(path + fileName + '.txt', {
+            flags: 'a'
+        });
         data.forEach(
             (row) => { 
                 stream.write(row.join(', ') + '\n'); 
