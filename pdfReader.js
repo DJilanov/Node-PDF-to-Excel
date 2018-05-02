@@ -53,7 +53,7 @@ const saveToExcel = false;
                     });
                     processor.on('complete', (data) => {
                         inspect(data.text_pages, 'extracted text pages');
-                        refactorImageDataToUsable(null, data.text_pages);
+                        refactorImageDataToUsable(null, data.text_pages, fileName);
                     });
                     processor.on('error', (err) => {
                         inspect(err, 'error while extracting pages');
@@ -64,13 +64,25 @@ const saveToExcel = false;
         });
     }
 
-    function refactorImageDataToUsable(err, pagesData) {
+    function refactorImageDataToUsable(err, pagesData, fileName) {
         if (err) {
             return console.log(err);
         }
+        // it is text based pdf
+        const config = companyConfiguration.getCompanyConfiguration(pagesData[0]);
+        let startRow = 0;
+        let endRow = 0;
+        let data = [];
         for(pageCounter = 0; pageCounter < pagesData.length; pageCounter++) {
             let pageData = pagesData[pageCounter].split('\n');
+            for(let innerCounter = 0; innerCounter < pageData.length; innerCounter++) {
+                if(pageData[innerCounter].indexOf(config.startRow) > -1) {
+                    startRow = innerCounter + 1;
+                }
+            }
+            data.push(...pageData.slice(startRow))
         }
+        writeToTxt(fileName, data)
     }
 
     function getInformation(rows, start, end) {
@@ -113,7 +125,11 @@ const saveToExcel = false;
         }
         data.forEach(
             (row) => { 
-                stream.write(row.join(', ') + '\n'); 
+                if(row.join) {
+                    stream.write(row.join(', ') + '\n'); 
+                } else {
+                    stream.write(row + '\n'); 
+                }
             }
         );
         stream.end();

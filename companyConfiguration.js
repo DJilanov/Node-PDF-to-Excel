@@ -1,4 +1,5 @@
 const felfhues = 'FELDHUES';
+const falceast = 'FALC EAST';
 
 (function() {
     function getFelfhuesConfig(objects, spreadsheetName) {
@@ -7,6 +8,14 @@ const felfhues = 'FELDHUES';
             endRow: 'Bestellwert',
             startTitle: 'Fax.',
             endTitle: 'Werk'
+        }
+    }
+    function getFalcEastConfig(objects, spreadsheetName) {
+        return {
+            startRow: ':.cod.art',
+            endRow: 'Totale EUR',
+            // startTitle: 'Fax.',
+            // endTitle: 'Werk'
         }
     }
 
@@ -19,9 +28,20 @@ const felfhues = 'FELDHUES';
         return false;
     }
 
+    function isFalcEast(data) {
+        if(data.indexOf(falceast) > -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function getCompanyConfiguration(rows) {
         if(isFelfhues(rows)) {
             return getFelfhuesConfig();
+        }
+        if(isFalcEast(rows)) {
+            return getFalcEastConfig();
         }
     }
     
