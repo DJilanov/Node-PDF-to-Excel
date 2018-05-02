@@ -38,7 +38,7 @@ const saveToExcel = false;
                     if(saveToExcel) {
     
                     } else {
-                        writeToTxt(fileName, getInformation(rows, config));
+                        writeToTxt(fileName, getInformation(rows, config.startRow, config.endRow), getInformation(rows, config.startTitle, config.endTitle));
                     }
                 } else {
                     let processor = pdfExtract(fullPath, {
@@ -46,39 +46,44 @@ const saveToExcel = false;
                         ocr_flags: [
                             '-psm 1',       // automatically detect page orientation
                         ]
-                    }, function(err) {
+                    }, (err) => {
                         if (err) {
-                            return callback(err);
+                            return refactorImageDataToUsable(err);
                         }
                     });
-                    processor.on('complete', function(data) {
+                    processor.on('complete', (data) => {
                         inspect(data.text_pages, 'extracted text pages');
-                        callback(null, data.text_pages);
+                        refactorImageDataToUsable(null, data.text_pages);
                     });
-                    processor.on('error', function(err) {
+                    processor.on('error', (err) => {
                         inspect(err, 'error while extracting pages');
-                        return callback(err);
+                        return refactorImageDataToUsable(err);
                     });
                 }
             });
         });
     }
 
-    function callback(err, data) {
-
+    function refactorImageDataToUsable(err, pagesData) {
+        if (err) {
+            return console.log(err);
+        }
+        for(pageCounter = 0; pageCounter < pagesData.length; pageCounter++) {
+            let pageData = pagesData[pageCounter].split('\n');
+        }
     }
 
-    function getInformation(rows, config) {
+    function getInformation(rows, start, end) {
         let startingRow = 0;
         let endingRow = 0;
 
         for(let index = 0; index < rows.length; index++) {
-            if(rows[index].indexOf(config.startRow) > -1) {
+            if(rows[index].indexOf(start) > -1) {
                 if(startingRow === 0) {
                     startingRow = index;
                 }
             }
-            if(rows[index].indexOf(config.endRow) > -1) {
+            if(rows[index].indexOf(end) > -1) {
                 endingRow = index;
             }
         }
@@ -95,10 +100,17 @@ const saveToExcel = false;
         })
     }
 
-    function writeToTxt(fileName, data) {
+    function writeToTxt(fileName, data, titleData) {
         let stream = fs.createWriteStream(path + fileName + '.txt', {
             flags: 'a'
         });
+        if(titleData) {
+            titleData.forEach(
+                (row) => { 
+                    stream.write(row.join(', ') + '\n'); 
+                }
+            );
+        }
         data.forEach(
             (row) => { 
                 stream.write(row.join(', ') + '\n'); 

@@ -4,7 +4,9 @@ const felfhues = 'FELDHUES';
     function getFelfhuesConfig(objects, spreadsheetName) {
         return {
             startRow: 'Abruf',
-            endRow: 'Bestellwert'
+            endRow: 'Bestellwert',
+            startTitle: 'Fax.',
+            endTitle: 'Werk'
         }
     }
 
