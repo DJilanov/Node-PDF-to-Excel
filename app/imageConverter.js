@@ -5,8 +5,11 @@ const inspect = require('eyes').inspector({maxLength:20000});
 // we add converters
 const textConverter = require('./textConverter');
 
+// Company configs
+const companyConfiguration = require('./companyConfiguration');
+
 (function() {
-    function processImagePdf(fullPath) {
+    function processImagePdf(fullPath, fileName) {
         let processor = pdfExtract(fullPath, {
             type: 'ocr',
             ocr_flags: [

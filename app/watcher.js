@@ -2,10 +2,8 @@
 const watchr = require('watchr');
 const pdfReader = require('./pdfReader');
 
-// Define our watching parameters
-// const path = process.argv[process.argv.length - 1];
-const path = 'C:/training/node-pdf-to-excel/testing/';
-// const path = '/home/osboxes/Public/node-pdf-to-excel/training/';
+// Get our path
+const path = process.argv[process.argv.length - 1];
 
 
 function listener(changeType, fullPath, currentStat, previousStat) {
@@ -39,7 +37,7 @@ stalker.setConfig({
     preferredMethods: ['watch', 'watchFile'],
     followLinks: true,
     ignorePaths: false,
-    ignoreHiddenFiles: false,
+    ignoreHiddenFiles: true,
     ignoreCommonPatterns: true,
     ignoreCustomPatterns: null
 });

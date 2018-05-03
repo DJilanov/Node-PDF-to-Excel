@@ -3,14 +3,12 @@ const pdf2table = require('pdf2table');
 const pathModule = require('path');
 const fs = require('fs');
 
+// Get our path
+const path = process.argv[process.argv.length - 1];
+
 // we add converters
 const textConverter = require('./textConverter');
 const imageConverter = require('./imageConverter');
-
-// Define our watching parameters
-// const path = process.argv[process.argv.length - 1];
-const path = 'C:/training/node-pdf-to-excel/testing/';
-// const path = '/home/osboxes/Public/node-pdf-to-excel/training/';
 
 // Excel converter
 const excelConverter = require('./excelConverter');
@@ -41,7 +39,7 @@ const saveToExcel = false;
                         textConverter.writeToTxt(fileName, rows, config);
                     }
                 } else {
-                    imageConverter.processImagePdf(fullPath);
+                    imageConverter.processImagePdf(fullPath, fileName);
                 }
             });
         });

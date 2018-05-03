@@ -6,8 +6,10 @@
   "repository": "",
   "author": "Dimitar Jilanov",
   "scripts": {
-    "start-develop": "node app/watcher.js C:/training/node-pdf-to-excel/testing/",
-    "start-debug": "node --inspect --debug-brk app/watcher.js",
+    "start-develop-windows": "node app/watcher.js C:/training/node-pdf-to-excel/testing/",
+    "start-develop-linux": "node app/watcher.js /home/osboxes/Public/node-pdf-to-excel/testing/",
+    "start-debug-windows": "node --inspect --debug-brk app/watcher.js  C:/training/node-pdf-to-excel/testing/",
+    "start-debug-linux": "node --inspect --debug-brk app/watcher.js /home/osboxes/Public/node-pdf-to-excel/testing/",
     "lint": "npm lint .",
     "validate": "npm ls"
   },

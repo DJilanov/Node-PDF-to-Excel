@@ -1,6 +1,9 @@
 // Import the file system
 const fs = require('fs');
 
+// Get our path
+const path = process.argv[process.argv.length - 1];
+
 (function() {
     function writeToTxt(fileName, rows, config) {
         let data = getInformation(rows, config.startRow, config.endRow)
@@ -11,7 +14,11 @@ const fs = require('fs');
         if(titleData) {
             titleData.forEach(
                 (row) => { 
-                    stream.write(row.join(', ') + '\n'); 
+                    if(row.join) {
+                        stream.write(row.join(', ') + '\n'); 
+                    } else {
+                        stream.write(row + '\n'); 
+                    }
                 }
             );
         }
